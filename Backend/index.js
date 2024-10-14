@@ -8,6 +8,7 @@ const config = require("config");
 require('dotenv').config();
 
 var cors = require('cors');
+const { request } = require('http');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(cors());
 app.use('/api/payment', require('./routes/payment.js'));
 app.use('/api/response', require('./routes/response.js'));
 app.use('/api/test', require('./routes/test.js'));
+app.use('/api/testFailure',require('./routes/testFailure.js'));
 app.use('/api/signup',require('./routes/auth.js'));
 app.use("/api/login",require("./routes/login.js"))
 

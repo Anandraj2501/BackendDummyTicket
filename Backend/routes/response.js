@@ -30,6 +30,7 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
       
       },
     });
+    console.log(result.request.res.responseUrl);
     res.send(result.request.res.responseUrl);
   } catch (err) {
     console.log('error', err);

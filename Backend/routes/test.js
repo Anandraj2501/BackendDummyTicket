@@ -7,7 +7,7 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 const OrderConfirmed = require('../Models/OrderConfirmed');
 const authenticate = require('../middleware/authenticate');
 //To verify the payment and save in your database
-router.post('/test',authenticate, async (req, res) => {
+router.post('/',authenticate, async (req, res) => {
     console.log("in")
   if (req.body.status == 'success') {
     const {
