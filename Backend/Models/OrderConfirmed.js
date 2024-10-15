@@ -1,142 +1,66 @@
 const mongoose = require("mongoose");
 
+const PassengerSchema = mongoose.Schema({
+  title: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  dob: { type: Date, required: true }, // Date of birth
+  nationality: { type: String, required: true },
+});
+
 const OrderConfirmSchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    country: {
-      type: String,
-    },
-
-    mode: {
-      type: String,
-    },
-    error_Message: {
-      type: String,
-    },
-    state: {
-      type: String,
-    },
-    bankcode: {
-      type: String,
-    },
-    txnid: {
-      type: String,
-    },
-    net_amount_debit: {
-      type: String,
-    },
-    lastname: {
-      type: String,
-    },
-    zipcode: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    productinfo: {
-      type: String,
-    },
-    hash: {
-      type: String,
-    },
-    status: {
-      type: String,
-    },
-    firstname: {
-      type: String,
-    },
-    city: {
-      type: String,
-    },
-    isConsentPayment: {
-      type: String,
-    },
-    error: {
-      type: String,
-    },
-    addedon: {
-      type: String,
-    },
-
-    encryptedPaymentId: {
-      type: String,
-    },
-    bank_ref_num: {
-      type: String,
-    },
-    key: {
-      type: String,
-    },
-    email: {
-      type: String,
-    },
-    amount: {
-      type: String,
-    },
-    unmappedstatus: {
-      type: String,
-    },
-    address2: {
-      type: String,
-    },
-    payuMoneyId: {
-      type: String,
-    },
-    address1: {
-      type: String,
-    },
-
-    mihpayid: {
-      type: String,
-    },
-
-    giftCardIssued: {
-      type: String,
-    },
-    field1: {
-      type: String,
-    },
-    cardnum: {
-      type: String,
-    },
-    field7: {
-      type: String,
-    },
-    field6: {
-      type: String,
-    },
-    field9: {
-      type: String,
-    },
-    field8: {
-      type: String,
-    },
-    amount_split: {
-      type: String,
-    },
-    field3: {
-      type: String,
-    },
-    field2: {
-      type: String,
-    },
-    field5: {
-      type: String,
-    },
-    PG_TYPE: {
-      type: String,
-    },
-    field4: {
-      type: String,
-    },
-    name_on_card: {
-      type: String,
-    },
+    mihpayid: { type: String, required: true },
+    mode: { type: String, required: true },
+    status: { type: String, required: true },
+    unmappedstatus: { type: String },
+    key: { type: String },
+    txnid: { type: String, required: true },
+    amount: { type: String, required: true },
+    cardCategory: { type: String },
+    discount: { type: String },
+    net_amount_debit: { type: String },
+    addedon: { type: Date, required: true },
+    productinfo: { type: String },
+    firstname: { type: String },
+    lastname: { type: String },
+    address1: { type: String },
+    address2: { type: String },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+    zipcode: { type: String },
+    email: { type: String, required: true },
+    phone: { type: String },
+    udf1: { type: String },
+    udf2: { type: String },
+    udf3: { type: String },
+    udf4: { type: String },
+    udf5: { type: String },
+    udf6: { type: String },
+    udf7: { type: String },
+    udf8: { type: String },
+    udf9: { type: String },
+    udf10: { type: String },
+    hash: { type: String, required: true },
+    field1: { type: String },
+    field2: { type: String },
+    field3: { type: String },
+    field4: { type: String },
+    field5: { type: String },
+    field6: { type: String },
+    field7: { type: String },
+    field8: { type: String },
+    field9: { type: String },
+    payment_source: { type: String },
+    meCode: { type: String },
+    PG_TYPE: { type: String },
+    bank_ref_num: { type: String },
+    bankcode: { type: String },
+    error: { type: String },
+    error_Message: { type: String },
+    cardnum: { type: String },
+    passengers: [PassengerSchema],
   },
   { timestamps: true }
 );

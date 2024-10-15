@@ -4,6 +4,7 @@ const router = express.Router();
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 const authenticate = require("../middleware/authenticate");
+const crypto = require('crypto');
 
 router.post('/', urlencodedParser,authenticate, async (req, res) => {
   try {
@@ -12,7 +13,8 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
       !req.body.amount ||
       !req.body.productinfo ||
       !req.body.firstname ||
-      !req.body.email
+      !req.body.email ||
+      !req.body.udf1
     ) {
       console.log("missing");
       res.send('Mandatory fields missing');
@@ -31,12 +33,18 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
         '|' +
         pd.email +
         '|' +
-        '||||||||||' +
+        pd.udf1 + 
+        '||||||||||' + 
         process.env.SALT; //live or test salt
       var sha = new jsSHA('SHA-512', 'TEXT'); //encryption taking place
       sha.update(hashString);
       var hash = sha.getHash('HEX'); //hashvalue converted to hexvalue
-      res.send({hash: hash});  //hashvalue is sent as response
+      console.log(hash);
+      res.send({hash: hash});
+      // console.log(hashString);
+      // const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+      // console.log(hash);
+      // res.send({hash: hash});   //hashvalue is sent as response
     }
   } catch {
     console.log('error payment');
