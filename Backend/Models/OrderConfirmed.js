@@ -7,60 +7,23 @@ const PassengerSchema = mongoose.Schema({
   dob: { type: Date, required: true }, // Date of birth
   nationality: { type: String, required: true },
 });
-
+const TravellingDetailsSchema = mongoose.Schema({
+  from: { type: String, required: true }, // Departure location
+  to: { type: String, required: true },   // Arrival location
+  departureDate: { type: Date, required: true }, // Departure date
+  returnDate: { type: Date }, // Optional return date for round-trip
+  tripType: { type: String, enum: ['one Way', 'Round Trip'], required: true }, // Trip type
+});
 const OrderConfirmSchema = mongoose.Schema(
   {
-    mihpayid: { type: String, required: true },
-    mode: { type: String, required: true },
-    status: { type: String, required: true },
-    unmappedstatus: { type: String },
-    key: { type: String },
     txnid: { type: String, required: true },
+    status: { type: String, required: true },
     amount: { type: String, required: true },
-    cardCategory: { type: String },
-    discount: { type: String },
-    net_amount_debit: { type: String },
-    addedon: { type: Date, required: true },
     productinfo: { type: String },
     firstname: { type: String },
     lastname: { type: String },
-    address1: { type: String },
-    address2: { type: String },
-    city: { type: String },
-    state: { type: String },
-    country: { type: String },
-    zipcode: { type: String },
-    email: { type: String, required: true },
-    phone: { type: String },
-    udf1: { type: String },
-    udf2: { type: String },
-    udf3: { type: String },
-    udf4: { type: String },
-    udf5: { type: String },
-    udf6: { type: String },
-    udf7: { type: String },
-    udf8: { type: String },
-    udf9: { type: String },
-    udf10: { type: String },
-    hash: { type: String, required: true },
-    field1: { type: String },
-    field2: { type: String },
-    field3: { type: String },
-    field4: { type: String },
-    field5: { type: String },
-    field6: { type: String },
-    field7: { type: String },
-    field8: { type: String },
-    field9: { type: String },
-    payment_source: { type: String },
-    meCode: { type: String },
-    PG_TYPE: { type: String },
-    bank_ref_num: { type: String },
-    bankcode: { type: String },
-    error: { type: String },
-    error_Message: { type: String },
-    cardnum: { type: String },
     passengers: [PassengerSchema],
+    travellingDetails: TravellingDetailsSchema
   },
   { timestamps: true }
 );

@@ -36,7 +36,8 @@ app.use('/api/response', require('./routes/response.js'));
 app.use('/api/test', require('./routes/test.js'));
 app.use('/api/testFailure',require('./routes/testFailure.js'));
 app.use('/api/signup',require('./routes/auth.js'));
-app.use("/api/login",require("./routes/login.js"))
+app.use("/api/login",require("./routes/login.js"));
+app.use("/api/getTicketData",require("./routes/getTicketData.js"));
 
 
 const PORT = process.env.PORT || 8080;
