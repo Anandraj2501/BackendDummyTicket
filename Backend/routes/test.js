@@ -125,20 +125,15 @@ const OrderConfirmed = require('../Models/OrderConfirmed');
 // To verify the payment and update the order status
 router.post('/', async (req, res) => {
   try {
-    console.log("Incoming payment verification request");
 
     // Find the order by txnid
-    console.log(req.body.txnid);
     const order = await OrderConfirmed.findOne({ txnid: req.body.txnid });
-    console.log(order);
     // If the order exists and the payment status is 'success', update the status to 'paid'
     if (order) {
       await OrderConfirmed.findOneAndUpdate(
         { txnid: req.body.txnid },
         { status: 'paid' }
       );
-
-      console.log(`Order with txnid ${req.body.txnid} has been updated to 'paid'.`);
 
       res.status(200).send(`
         <!DOCTYPE html>
@@ -182,7 +177,6 @@ router.post('/', async (req, res) => {
         message: `Order with transaction ID: ${req.body.txnid} not found.`,
       });
     } else {
-      console.log("Payment unsuccessful");
       res.status(400).send({
         status: 'failure',
         message: 'Payment was not successful. Please try again.',
