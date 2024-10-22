@@ -17,11 +17,9 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
       !req.body.email ||
       !req.body.udf1
     ) {
-      console.log("missing");
       res.send('Mandatory fields missing');
     } else {
       var pd = req.body;
-      console.log(pd);
       var hashString =
       process.env.PAYMENT_KEY + // live or test key
         '|' +
@@ -43,12 +41,7 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
       var sha = new jsSHA('SHA-512', 'TEXT'); //encryption taking place
       sha.update(hashString);
       var hash = sha.getHash('HEX'); //hashvalue converted to hexvalue
-      console.log(hash);
-      
-      // console.log(hashString);
-      // const hash = crypto.createHash('sha512').update(hashString).digest('hex');
-      // console.log(hash);
-      // res.send({hash: hash});   //hashvalue is sent as response
+
       const newOrder = new OrderConfirmed({
         txnid: pd.txnid,
         status: 'pending', // Set status as pending initially
@@ -65,7 +58,6 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
 
     }
   } catch(error) {
-    console.log('error payment',error);
   }
 });
 
