@@ -21,6 +21,7 @@ const OrderConfirmSchema = mongoose.Schema(
     amount: { type: String, required: true },
     productinfo: { type: String },
     firstname: { type: String },
+    email: {type: String},
     lastname: { type: String },
     passengers: [PassengerSchema],
     travellingDetails: TravellingDetailsSchema

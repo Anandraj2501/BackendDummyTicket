@@ -49,6 +49,7 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
         productinfo: pd.productinfo,
         firstname: pd.firstname,
         lastname: "",
+        email: pd.email,
         passengers: JSON.parse(pd.udf1), // Parse passengers from JSON string
         travellingDetails: JSON.parse(pd.udf2), // Parse travellingDetails from JSON string
       });

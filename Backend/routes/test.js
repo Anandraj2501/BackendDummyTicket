@@ -1,126 +1,20 @@
-// var jsSHA = require('jssha');
-// const express = require('express');
-// const router = express.Router();
-// var bodyParser = require('body-parser');
-// const { default: axios } = require('axios');
-// var urlencodedParser = bodyParser.urlencoded({ extended: false });
-// const OrderConfirmed = require('../Models/OrderConfirmed');
 
-
-// // To verify the payment and save in your database
-// router.post('/', async (req, res) => {
-//   // console.log("Incoming payment verification request");
-//   // let travellingDetails = {};
-
-//   // console.log(req.body,"reqbody");
-//   // let passengerDetails = [];
-//   // if (req.body.udf1) {
-//   //   try {
-//   //     // Decode the URL-encoded string
-//   //     const decodedPassengers = decodeURIComponent(req.body.udf1);
-//   //     // Replace HTML character entities with actual characters
-//   //     const cleanedPassengers = decodedPassengers.replace(/&quot;/g, '"');
-//   //     // Parse the cleaned JSON string
-//   //     passengerDetails = JSON.parse(cleanedPassengers);
-
-
-//   //   } catch (error) {
-//   //     console.error("Failed to parse passenger details:", error);
-//   //   }
-//   // }
-//   // console.log(passengerDetails);
-
-//   // // Parsing travelling details from udf2
-//   // if (req.body.udf2) {
-//   //   try {
-//   //     const decodedTravellingDetails = decodeURIComponent(req.body.udf2);
-//   //     const cleanedTravellingDetails = decodedTravellingDetails.replace(/&quot;/g, '"');
-//   //     travellingDetails = JSON.parse(cleanedTravellingDetails);
-//   //   } catch (error) {
-//   //     console.error("Failed to parse travelling details:", error);
-//   //   }
-//   // }
-
-//   // console.log("Parsed Travelling Details:", travellingDetails);
-
-//   // if (req.body.status === 'success') {
-//   //   try {
-//   //     // Create new order object
-//   //     const newOrder = new OrderConfirmed({
-//   //       country: req.body.country,
-//   //       mode: req.body.mode,
-//   //       error_Message: req.body.error_Message,
-//   //       state: req.body.state,
-//   //       bankcode: req.body.bankcode,
-//   //       txnid: req.body.txnid,
-//   //       net_amount_debit: req.body.net_amount_debit,
-//   //       lastname: req.body.lastname,
-//   //       zipcode: req.body.zipcode,
-//   //       phone: req.body.phone,
-//   //       productinfo: req.body.productinfo,
-//   //       hash: req.body.hash,
-//   //       status: req.body.status,
-//   //       firstname: req.body.firstname,
-//   //       city: req.body.city,
-//   //       isConsentPayment: req.body.isConsentPayment,
-//   //       error: req.body.error,
-//   //       addedon: req.body.addedon,
-//   //       encryptedPaymentId: req.body.encryptedPaymentId,
-//   //       bank_ref_num: req.body.bank_ref_num,
-//   //       key: req.body.key,
-//   //       email: req.body.email,
-//   //       amount: req.body.amount,
-//   //       unmappedstatus: req.body.unmappedstatus,
-//   //       address2: req.body.address2,
-//   //       payuMoneyId: req.body.payuMoneyId,
-//   //       address1: req.body.address1,
-//   //       mihpayid: req.body.mihpayid,
-//   //       giftCardIssued: req.body.giftCardIssued,
-//   //       field1: req.body.field1,
-//   //       cardnum: req.body.cardnum,
-//   //       field7: req.body.field7,
-//   //       field6: req.body.field6,
-//   //       field9: req.body.field9,
-//   //       field8: req.body.field8,
-//   //       amount_split: req.body.amount_split,
-//   //       field3: req.body.field3,
-//   //       field2: req.body.field2,
-//   //       field5: req.body.field5,
-//   //       PG_TYPE: req.body.PG_TYPE,
-//   //       field4: req.body.field4,
-//   //       name_on_card: req.body.name_on_card,
-//   //       passengers: passengerDetails,
-//   //       travellingDetails: travellingDetails
-//   //     });
-
-//   //     // Save the order to the database
-//   //     await newOrder.save();
-
-//   //     res.status(200).send({
-//   //       status: req.body.status,
-//   //       transaction_id: `Your transaction ID is: ${req.body.mihpayid}. Kindly save it for any further query related to your placed order.`,
-//   //       message: "Congratulations! You'll shortly receive an acknowledgment email from us regarding your placed order. Thank you for buying; we are glad to serve you!",
-//   //     });
-//   //   } catch (err) {
-//   //     console.error("Error saving order to MongoDB:", err);
-//   //     res.status(500).send('An error occurred while saving the order data');
-//   //   }
-//   // } else {
-//   //   console.log("Payment unsuccessful");
-//   //   res.status(400).send({
-//   //     status: 'failure',
-//   //     message: 'Payment was not successful. Please try again.',
-//   //   });
-//   // }
-// });
-
-// module.exports = router;
 
 var jsSHA = require('jssha');
 const express = require('express');
 const router = express.Router();
 var bodyParser = require('body-parser');
 const OrderConfirmed = require('../Models/OrderConfirmed');
+const nodemailer = require('nodemailer');
+
+// Nodemailer transporter configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // e.g., 'gmail'
+  auth: {
+    user: 'araj250101@gmail.com', // your email
+    pass: 'pacp vtvu bzgf amlo',    // your email password or app password
+  },
+});
 
 // To verify the payment and update the order status
 router.post('/', async (req, res) => {
@@ -134,6 +28,32 @@ router.post('/', async (req, res) => {
         { txnid: req.body.txnid },
         { status: 'paid' }
       );
+      // Send confirmation email with ticket details
+      const mailOptions = {
+        from: 'araj250101@example.com', // sender address
+        to: order.email,                // user's email from the order
+        subject: 'Order Confirmation and Ticket Download Link',
+        html: `
+          <h1>Payment Successful</h1>
+          <p>Dear ${req.body.firstname} ${order.lastname},</p>
+          <p>Thank you for your payment. Here are the details of your order:</p>
+          <ul>
+            <li><strong>Transaction ID:</strong> ${req.body.txnid}</li>
+            <li><strong>Amount:</strong> ${req.body.amount}</li>
+            <li><strong>Name:</strong> ${req.body.firstname} ${order.lastname}</li>
+          </ul>
+          <p>Thank you for your purchase!</p>
+        `,
+      };
+
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending email:", error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
+      });
 
       res.status(200).send(`
         <!DOCTYPE html>
