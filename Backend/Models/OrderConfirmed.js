@@ -4,8 +4,8 @@ const PassengerSchema = mongoose.Schema({
   title: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  dob: { type: Date, required: true }, // Date of birth
-  nationality: { type: String, required: true },
+  dob: { type: Date, required: false }, // Date of birth
+  nationality: { type: String, required: false },
 });
 const TravellingDetailsSchema = mongoose.Schema({
   from: { type: String, required: true }, // Departure location

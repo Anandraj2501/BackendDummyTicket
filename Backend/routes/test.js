@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
 
     // Find the order by txnid
     const order = await OrderConfirmed.findOne({ txnid: req.body.txnid });
+    console.log(order);
     // If the order exists and the payment status is 'success', update the status to 'paid'
     if (order) {
       await OrderConfirmed.findOneAndUpdate(
@@ -42,6 +43,7 @@ router.post('/', async (req, res) => {
             <li><strong>Amount:</strong> ${req.body.amount}</li>
             <li><strong>Name:</strong> ${req.body.firstname} ${order.lastname}</li>
           </ul>
+          <a href="http://localhost:3000/downloadTicket?txnId=${req.body.txnid}" class="download-button">Download PDF</a>
           <p>Thank you for your purchase!</p>
         `,
       };
