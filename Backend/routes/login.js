@@ -41,12 +41,12 @@ router.post("/", async (req, res) => {
             message: "Login Successful",
             email: user.email,
             username: user.username,
+            isAdmin: user.isAdmin,
             token
         });
 
     } catch (error) {
         // Handle errors
-        console.error(error);
         if (error.message.includes("Email not found")) {
             return res.status(404).send({
                 message: "Email not found"

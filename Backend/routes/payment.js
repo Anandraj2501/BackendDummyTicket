@@ -9,7 +9,6 @@ const OrderConfirmed = require('../Models/OrderConfirmed');
 
 router.post('/', urlencodedParser,authenticate, async (req, res) => {
   try {
-    console.log(req.body);
     if (
       !req.body.txnid ||
       !req.body.amount ||
@@ -55,12 +54,13 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
         travellingDetails: JSON.parse(pd.udf2), // Parse travellingDetails from JSON string
       });
       await newOrder.save();
-      console.log(hash);
       res.send({hash: hash});
 
     }
   } catch(error) {
-    console.log(error);
+    res.status(500).send({
+      error
+  });
   }
 });
 

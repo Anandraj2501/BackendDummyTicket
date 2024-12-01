@@ -5,8 +5,7 @@ const router = express.Router();
 // register endpoint
 router.post("/", async(req, res) => {
   // hash the password
-  const { email, username, password, phone } = req.body;
-  console.log(email, username, password, phone)
+  const { email, username, password, phone, isAdmin } = req.body;
   if (!email || !username || !password || !phone) {
     res.status(400).send({
       message: "Please provide all details"
@@ -37,7 +36,8 @@ router.post("/", async(req, res) => {
       email,
       username,
       password: hashedPassword,
-      phone
+      phone,
+      isAdmin
     });
 
     // Save the new user

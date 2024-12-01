@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const OrderConfirmed = require('../Models/OrderConfirmed');
+const authenticateAdmin = require('../middleware/authenticateAdmin');
 
 
-router.post('/updatepassengers/:id', async (req, res) => {
+router.post('/updatepassengers/:id',authenticateAdmin, async (req, res) => {
     const { id } = req.params;
     const updatedPassengerDetails = req.body; // Expect updated details in the request body
 
@@ -24,7 +25,6 @@ router.post('/updatepassengers/:id', async (req, res) => {
 
         res.status(200).send({ message: 'Passenger updated successfully', order });
     } catch (error) {
-        console.error(error);
         res.status(500).send({ message: 'Internal server error', error });
     }
 });

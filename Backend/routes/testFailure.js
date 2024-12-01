@@ -11,7 +11,6 @@ const OrderConfirmed = require('../Models/OrderConfirmed');
 // To verify the payment and update the order status in case of failure
 router.post('/', async (req, res) => {
   try {
-    console.log("Incoming payment verification request for failure case");
 
     // Find the order by txnid
     const order = await OrderConfirmed.findOne({ txnid: req.body.txnid });
@@ -25,7 +24,6 @@ router.post('/', async (req, res) => {
       );
       
 
-      console.log(`Order with txnid ${req.body.txnid} has been updated to 'failed'.`);
 
       res.status(200).send(`
         <!DOCTYPE html>
@@ -68,14 +66,12 @@ router.post('/', async (req, res) => {
         message: `Order with transaction ID: ${req.body.txnid} not found.`,
       });
     } else {
-      console.log("Payment status mismatch or already paid");
       res.status(400).send({
         status: 'failure',
         message: 'Order was not found or payment status does not match.',
       });
     }
   } catch (err) {
-    console.error("Error processing payment failure:", err);
     res.status(500).send('An error occurred while processing the payment failure');
   }
 });

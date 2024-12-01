@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
 
     // Find the order by txnid
     const order = await OrderConfirmed.findOne({ txnid: req.body.txnid });
-    console.log(order);
     // If the order exists and the payment status is 'success', update the status to 'paid'
     if (order) {
       await OrderConfirmed.findOneAndUpdate(
@@ -51,9 +50,7 @@ router.post('/', async (req, res) => {
       // Send the email
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error("Error sending email:", error);
         } else {
-          console.log('Email sent:', info.response);
         }
       });
 
@@ -105,7 +102,6 @@ router.post('/', async (req, res) => {
       });
     }
   } catch (err) {
-    console.error("Error processing payment:", err);
     res.status(500).send('An error occurred while processing the payment');
   }
 });
