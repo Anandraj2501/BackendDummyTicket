@@ -2,12 +2,13 @@ var jsSHA = require('jssha');
 const express = require('express');
 const router = express.Router();
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({extended: false});
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 const authenticate = require("../middleware/authenticate");
 const crypto = require('crypto');
 const OrderConfirmed = require('../Models/OrderConfirmed');
+const ReferenceCounter = require("../Models/ReferenceCounter");
 
-router.post('/', urlencodedParser,authenticate, async (req, res) => {
+router.post('/', urlencodedParser, authenticate, async (req, res) => {
   try {
     if (
       !req.body.txnid ||
@@ -21,7 +22,7 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
     } else {
       var pd = req.body;
       var hashString =
-      process.env.PAYMENT_KEY + // live or test key
+        process.env.PAYMENT_KEY + // live or test key
         '|' +
         pd.txnid +
         '|' +
@@ -33,17 +34,26 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
         '|' +
         pd.email +
         '|' +
-        pd.udf1 + 
-        '|' + 
+        pd.udf1 +
+        '|' +
         pd.udf2 +
-        '|||||||||' + 
+        '|||||||||' +
         process.env.SALT; //live or test salt
       var sha = new jsSHA('SHA-512', 'TEXT'); //encryption taking place
       sha.update(hashString);
       var hash = sha.getHash('HEX'); //hashvalue converted to hexvalue
+      // Fetch the next reference number
+      const referenceCounter = await ReferenceCounter.findOneAndUpdate(
+        {},
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+
+      const referenceNumber = referenceCounter.seq || 1001;
 
       const newOrder = new OrderConfirmed({
         txnid: pd.txnid,
+        referenceNumber,
         status: 'pending', // Set status as pending initially
         amount: pd.amount,
         productinfo: pd.productinfo,
@@ -54,13 +64,13 @@ router.post('/', urlencodedParser,authenticate, async (req, res) => {
         travellingDetails: JSON.parse(pd.udf2), // Parse travellingDetails from JSON string
       });
       await newOrder.save();
-      res.send({hash: hash});
+      res.send({ hash: hash });
 
     }
-  } catch(error) {
+  } catch (error) {
     res.status(500).send({
       error
-  });
+    });
   }
 });
 

@@ -23,7 +23,7 @@ router.get('/', authenticate , async (req, res) => {
   }
 });
 
-router.get('/all',authenticate, async (req, res) => {
+router.get('/all',authenticateAdmin, async (req, res) => {
   try {
     // Fetch all tickets from the OrderConfirmed collection
     const orders = await OrderConfirmed.find();

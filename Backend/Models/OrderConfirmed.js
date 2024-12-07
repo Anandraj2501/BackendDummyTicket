@@ -17,6 +17,7 @@ const TravellingDetailsSchema = mongoose.Schema({
 const OrderConfirmSchema = mongoose.Schema(
   {
     txnid: { type: String, required: true },
+    referenceNumber: { type: Number, required: true, unique: true }, // Incremental reference number
     status: { type: String, required: true },
     amount: { type: String, required: true },
     productinfo: { type: String },
